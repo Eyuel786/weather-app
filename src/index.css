@@ -1,5 +1,7 @@
 body {
   margin: 0;
+  overflow: hidden;
+  font-family: Inter, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -7,4 +9,16 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.sunny {
+  color: rgb(255, 204, 0);
+}
+
+.cloud {
+  color: rgb(0, 140, 255);
+}
+
+.partly_cloudy_day {
+  color: rgb(85, 0, 255);
 }
