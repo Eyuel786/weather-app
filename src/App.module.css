@@ -1,13 +1,13 @@
 .App {
     height: 100vh;
-    background-image: url("./assets/images/background.jpg");
+    background-image: url("background.jpg");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     display: flex;
     flex-direction: column;
-    align-items: center;
     padding: 4rem 0;
+    align-items: center;
     gap: 4rem;
 }
 
@@ -40,28 +40,30 @@
     -moz-user-select: none;
 }
 
-.todaysWeather {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 5rem;
-}
-
-.todaysWeather p {
-    font-weight: 600;
-}
-
-.todaysWeatherIcon {
-    font-size: 200px;
-}
-
-.todaysWeather .cityName {
-    font-size: 32px;
-    font-weight: 700;
-    margin: 0;
-}
-
 .weekdaysContainer {
     display: flex;
     gap: 1.5rem;
+}
+
+.spinnerContainer {
+    width: 50vw;
+    height: 50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.spinner {
+    height: 50px;
+    width: 50px;
+    border: 5px solid rgba(0, 0, 0, 0.1);
+    border-right: 5px solid orange;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
 }

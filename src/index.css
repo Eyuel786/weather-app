@@ -22,3 +22,7 @@ code {
 .partly_cloudy_day {
   color: rgb(85, 0, 255);
 }
+
+.rainy {
+  color: rgb(0, 140, 255);
+}

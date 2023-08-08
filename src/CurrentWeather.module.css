@@ -1,0 +1,20 @@
+.CurrentWeather {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5rem;
+}
+
+.CurrentWeather p {
+    font-weight: 600;
+}
+
+.CurrentWeatherIcon {
+    font-size: 200px;
+}
+
+.CurrentWeather .cityName {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0;
+}
