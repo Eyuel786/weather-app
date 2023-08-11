@@ -1,36 +1,23 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import classes from "./App.module.css";
 import axios from "axios";
+import { useCallback, useEffect, useRef, useState } from "react";
+
 import ForecastDay from "./ForecastDay";
 import CurrentWeather from "./CurrentWeather";
-import weatherConditions from "./weather_conditions.json";
+import { getDay } from "./utils/getDay";
+import { getIconPath } from "./utils/getIconPath";
 
+import classes from "./App.module.css";
+import ErrorMessage from "./ErrorMessge";
 
-function getDay(dateString) {
-  const dayIndex = new Date(dateString).getDay();
-
-  switch (dayIndex) {
-    case 0: return "Sunday";
-    case 1: return "Monday";
-    case 2: return "Tuesday";
-    case 3: return "Wednesday";
-    case 4: return "Thursday";
-    case 5: return "Friday";
-    case 6: return "Saturday";
-  }
-}
-
-function getIconPath(code, isDay = true) {
-  const time = isDay ? "day" : "night";
-  const currentCondition = weatherConditions.find(el => el.code === code);
-  return `/icons/${time}/${currentCondition.icon}.png`;
-}
 
 function App() {
-  const cityInputRef = useRef(null);
+  const cityInputRef = useRef(null)
   const [weatherData, setWeatherData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const errorTimeoutRef = useRef(null);
+
+  const handleCloseErrorMessage = () => setError(null);
 
   const fetchWeatherData = useCallback(async city => {
     try {
@@ -78,7 +65,7 @@ function App() {
       setWeatherData(transformedWeatherData);
 
     } catch (err) {
-      setError(err.message);
+      setError("Please enter a valid city name");
     } finally {
       setLoading(false);
     }
@@ -87,6 +74,16 @@ function App() {
   useEffect(() => {
     fetchWeatherData("Addis Ababa");
   }, [fetchWeatherData]);
+
+  useEffect(() => {
+    if (error) {
+      errorTimeoutRef.current = setTimeout(() => {
+        setError(null);
+      }, 5000);
+    } else {
+      clearTimeout(errorTimeoutRef.current);
+    }
+  }, [error]);
 
   const onSubmit = e => {
     e.preventDefault();
@@ -98,7 +95,7 @@ function App() {
 
     fetchWeatherData(city);
   }
-
+  // Add Error snackbar
   return (
     <div className={classes.App}>
       <form onSubmit={onSubmit}>
@@ -114,19 +111,28 @@ function App() {
         <div className={classes.spinnerContainer}>
           <div className={classes.spinner} />
         </div>}
+      {!loading && error &&
+        <ErrorMessage
+          errorText={error}
+          onClose={handleCloseErrorMessage} />}
       {!loading && weatherData &&
         <div className={classes.myCard}>
           <CurrentWeather
             city={weatherData.location.name}
             temp={weatherData.current.temp}
             condition={weatherData.current.condition}
-            iconPath={weatherData.current.iconPath} />
+            iconPath={weatherData.current.iconPath}
+            altText={weatherData.current.condition}
+            isDay={weatherData.current.isDay} />
           <div className={classes.weekdaysContainer}>
-            {weatherData.forecast.map(el => (
+            {weatherData.forecast.map((el, index) => (
               <ForecastDay
+                key={index}
                 day={el.weekDay}
                 avgTemp={el.avgTemp}
-                iconPath={el.iconPath} />
+                iconPath={el.iconPath}
+                condition={el.condition}
+                altText={el.condition} />
             ))}
           </div>
         </div>}
